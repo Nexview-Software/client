@@ -1,13 +1,38 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import App from './components';
+import { StoreProvider, Store } from './store';
 import reportWebVitals from './reportWebVitals';
 
+import './mapbox.css';
+
+function Entry() {
+  const { state } = React.useContext(Store);
+
+  const theme = React.useMemo(
+    () => createMuiTheme({
+      palette: {
+        type: !state.lightTheme ? 'dark' : 'light'
+      }
+    }),
+    [ state.lightTheme ]
+  );
+
+  return (
+    <ThemeProvider theme={ theme }>
+      <CssBaseline />
+      <App />
+    </ThemeProvider>
+  );
+};
+
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <StoreProvider>
+    <Entry />
+  </StoreProvider>,
   document.getElementById('root')
 );
 
